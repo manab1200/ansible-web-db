@@ -1,0 +1,22 @@
+- name: Install dependencies
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - python
+      - python-setuptools
+      - python-devel
+      - python-pip
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: python-packges
+
+- name: pip upgrade
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - pip
+    - PyMySQL
+    - flask-mysql
+  tag: python-pip

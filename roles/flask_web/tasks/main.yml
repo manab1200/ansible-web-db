@@ -1,0 +1,25 @@
+---
+# tasks file for flask_web
+- name: Install python flask dependencies
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - flask
+    - flask-mysql
+    - PyMySql
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: flask
+
+- name: Copy web-server code
+  copy:
+    src: ./app.py
+    dest: /opt/app.py
+    mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: fkask-copy-code
+
+- name: Start web-application
+  shell: Flask_APP=python /opt/app.py nohup flask run --host=0.0.0.0 &
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: flask-run

@@ -1,0 +1,79 @@
+- name: remove mariadb-libs
+  yum:
+    state: absent
+    name: mariadb-libs
+  tag: remove-mariadb
+
+- name: install mysql repository
+  yum:
+    state: latest
+    name: https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+    validate_certs: yes
+  tag: mysql-repo
+
+- name: install yum-utils, mysql-python, mysql-community-server
+  yum:
+    state: latest
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - yum-utils
+      - mysql-community-devel*
+      - mysql-community-server*
+      - MySQL-python
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: mysql-packages
+
+- name: Install MySQL database
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - mysql-server
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: mysql-install
+
+- name: Start Mysql Service
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  ignore_errors: "{{ ansible_check_modse }}"
+  tag: mysql-start
+
+#- name: get root password
+#  shell: "grep 'A temporary password is generated for root@localhost' /var/log/mysqld.log | awk -F ' ' '{print $(NF)}'"
+#  register: root_password
+#  tag: mysql-root-pass
+
+#- name: Change root password
+#  command: mysql --user root --password={{ root_password.stdout }} --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ new_root_password }}';"
+#  tag: mysql-change-pass
+
+- name: Copy my.cnf
+  command: sudo cp -rp /etc/my.cnf /root/.my.cnf
+  tag: mysql-copy-conf
+
+- name: Create Application DB User
+  mysql_user:
+    login_user: root
+    login_password: "{{ new_root_password }}"
+    config_file: "/etc/my.cnf"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: '*.*:ALL'
+    host_all: yes
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: mysql-create-user
+
+- name: Create Application Database
+  mysql_db:
+    login_user: root
+    login_password: "{{ new_root_password }}"
+    config_file: "/etc/my.cnf"
+    name: "{{ db_name }}"
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+  tag: mysql-create-databbase
