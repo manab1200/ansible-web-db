@@ -9,7 +9,7 @@
     - flask-mysql
     - PyMySql
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: flask
+  tags: flask
 
 - name: Copy web-server code
   copy:
@@ -17,9 +17,27 @@
     dest: /opt/app.py
     mode: 0755
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: fkask-copy-code
+  tags: flask-copy-code
+
+- name: Copy web-server code
+  copy:
+    src: ./flask_app.service
+    dest: /etc/systemd/system/
+    owner: root
+    group: root
+    mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: flask-copy-systemd-file
 
 - name: Start web-application
-  shell: Flask_APP=python /opt/app.py nohup flask run --host=0.0.0.0 &
+  service:
+    name: flask_app
+    state: started
+    enabled: yes
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: flask-run
+  tags: flask-start
+
+#- name: Start web-application
+  #shell: python /opt/app.py &
+  #ignore_errors: "{{ ansible_check_mode }}"
+  #tags: flask-run

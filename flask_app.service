@@ -1,0 +1,17 @@
+[Unit]
+Description=python flask app
+After=network.target
+
+[Service]
+User=root
+Group=root
+PermissionsStartOnly=true
+WorkingDirectory=/opt/
+#ExecStart=/usr/bin/flask run --host=0.0.0.0 --port=5000 --with-threads
+ExecStart=/bin/bash -c 'python /opt/app.py'
+Restart=on-failure
+RestartSec=10s
+RuntimeDirectoryMode=755
+
+[Install]
+WantedBy=multi-user.target
