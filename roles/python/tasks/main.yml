@@ -9,7 +9,7 @@
       - python-devel
       - python-pip
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: python-packges
+  tags: python-packges
 
 - name: pip upgrade
   pip:
@@ -19,4 +19,4 @@
     - pip
     - PyMySQL
     - flask-mysql
-  tag: python-pip
+  tags: python-pip

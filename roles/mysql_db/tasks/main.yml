@@ -2,14 +2,14 @@
   yum:
     state: absent
     name: mariadb-libs
-  tag: remove-mariadb
+  tags: remove-mariadb
 
 - name: install mysql repository
   yum:
     state: latest
     name: https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
     validate_certs: yes
-  tag: mysql-repo
+  tags: mysql-repo
 
 - name: install yum-utils, mysql-python, mysql-community-server
   yum:
@@ -22,7 +22,7 @@
       - mysql-community-server*
       - MySQL-python
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: mysql-packages
+  tags: mysql-packages
 
 - name: Install MySQL database
   yum:
@@ -32,28 +32,28 @@
     packages:
       - mysql-server
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: mysql-install
+  tags: mysql-install
 
 - name: Start Mysql Service
   service:
     name: mysqld
     state: started
     enabled: yes
-  ignore_errors: "{{ ansible_check_modse }}"
-  tag: mysql-start
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: mysql-start
 
 #- name: get root password
 #  shell: "grep 'A temporary password is generated for root@localhost' /var/log/mysqld.log | awk -F ' ' '{print $(NF)}'"
 #  register: root_password
-#  tag: mysql-root-pass
+#  tags: mysql-root-pass
 
 #- name: Change root password
 #  command: mysql --user root --password={{ root_password.stdout }} --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ new_root_password }}';"
-#  tag: mysql-change-pass
+#  tags: mysql-change-pass
 
 - name: Copy my.cnf
   command: sudo cp -rp /etc/my.cnf /root/.my.cnf
-  tag: mysql-copy-conf
+  tags: mysql-copy-conf
 
 - name: Create Application DB User
   mysql_user:
@@ -66,7 +66,7 @@
     host_all: yes
     state: present
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: mysql-create-user
+  tags: mysql-create-user
 
 - name: Create Application Database
   mysql_db:
@@ -76,4 +76,4 @@
     name: "{{ db_name }}"
     state: present
   ignore_errors: "{{ ansible_check_mode }}"
-  tag: mysql-create-databbase
+  tags: mysql-create-databbase
