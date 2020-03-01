@@ -8,6 +8,7 @@
       - python-setuptools
       - python-devel
       - python-pip
+      - git
   ignore_errors: "{{ ansible_check_mode }}"
   tags: python-packges
 

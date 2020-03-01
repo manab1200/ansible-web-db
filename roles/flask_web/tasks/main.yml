@@ -11,6 +11,12 @@
   ignore_errors: "{{ ansible_check_mode }}"
   tags: flask
 
+- git:
+    repo: 'https://github.com/manab1200/ansible-web-application.git'
+    dest: /opt/ansible-web-application/
+    clone: yes
+  tags: git-clone
+
 - name: Copy web-server code
   copy:
     src: ./app.py
@@ -28,6 +34,13 @@
     mode: 0755
   ignore_errors: "{{ ansible_check_mode }}"
   tags: flask-copy-systemd-file
+
+- name: systemd daemon-reload
+  command: systemctl daemon-reload
+  become: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: systemd-daemon-reload
+  
 
 - name: Start web-application
   service:
