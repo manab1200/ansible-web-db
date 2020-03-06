@@ -1,0 +1,17 @@
+[Unit]
+Description=flask-app daemon
+After=network.target
+
+[Service]
+PIDFile=/run/gunicorn/pid
+User=root
+Group=root
+RuntimeDirectory=gunicorn
+WorkingDirectory=/opt/ansible-web-application/
+ExecStart=/bin/gunicorn --pid /run/gunicorn/pid app:app --config /opt/ansible-web-application/guniconf.py
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -20,4 +20,5 @@
     - pip
     - PyMySQL
     - flask-mysql
+    - gunicorn
   tags: python-pip
