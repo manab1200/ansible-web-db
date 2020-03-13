@@ -1,0 +1,10 @@
+---
+# handlers file for gunicorn
+- name: Start gunicorn
+  service:
+    name: gunicorn
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  become: yes
+  tags: gunicorn-start

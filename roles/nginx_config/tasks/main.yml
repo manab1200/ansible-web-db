@@ -1,0 +1,11 @@
+---
+# tasks file for nginx-config
+- name: Copy nginx config
+  copy:
+    src: ./config/flask.conf
+    dest: /etc/nginx/conf.d/
+    owner: root
+    group: root
+    mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: nginx-config

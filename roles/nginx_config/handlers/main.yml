@@ -1,0 +1,9 @@
+---
+# handlers file for nginx-config
+- name: Start nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: nginx-start

@@ -2,4 +2,4 @@ db_name: employee_db
 db_user: db_user
 db_password: Db%Passw0rd
 new_root_password: Root%Passw0rd
-
+python_version: 3.7.6

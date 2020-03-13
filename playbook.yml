@@ -9,5 +9,9 @@
   hosts: web_servers
   become: yes
   roles:
+    - pyenv
     - python
+    - nginxinc.nginx
+    - nginx_config
+    - gunicorn
     - flask_web

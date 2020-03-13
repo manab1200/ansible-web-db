@@ -15,48 +15,13 @@
     repo: 'https://github.com/manab1200/ansible-web-application.git'
     dest: /opt/ansible-web-application/
     clone: yes
+    remote: upstream
+  become: yes
   tags: git-clone
 
-#- name: Copy web-server code
-#  copy:
-#    src: ./app.py
-#    dest: /opt/ansible-web-application/app.py
-#    mode: 0755
-#  ignore_errors: "{{ ansible_check_mode }}"
-#  tags: flask-copy-code
-#
-#- name: Copy gunicorn conf
-#  copy:
-#    src: ./gunicorn.py
-#    dest: /opt/ansible-web-application/gunicorn.py
-#    mode: 0755
-#  ignore_errors: "{{ ansible_check_mode }}"
-#  tags: gunicorn-conf
-
-
-- name: Copy nginx config
-  copy:
-    src: ./flask.conf
-    dest: /etc/nginx/conf.d/
-    owner: root
-    group: root
-    mode: 0755
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: nginx-config
-
 - name: Copy web-server code
   copy:
-    src: ./gunicorn.service
-    dest: /etc/systemd/system/
-    owner: root
-    group: root
-    mode: 0755
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: gunicorn-systemd-file
-
-- name: Copy web-server code
-  copy:
-    src: ./flask_app.service
+    src: ./config/flask_app.service
     dest: /etc/systemd/system/
     owner: root
     group: root
@@ -69,11 +34,3 @@
   become: yes
   ignore_errors: "{{ ansible_check_mode }}"
   tags: systemd-daemon-reload
-
-- name: Start web-application
-  service:
-    name: flask_app
-    state: started
-    enabled: yes
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: flask-start
