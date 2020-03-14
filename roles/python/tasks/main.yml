@@ -38,27 +38,6 @@
 
 - set_fact: ansible_python_interpreter=/root/.pyenv/shims/python
 
-- name: Install dependencies
-  yum:
-    name: "{{ packages }}"
-    state: latest
-  vars:
-    packages:
-      - gcc
-      - openssl-devel
-      - readline-devel
-      - bzip2-devel
-      - sqlite-devel
-      - patch
-      - libffi-devel
-      - python
-      - python-setuptools
-      - python-devel
-      - python-pip
-      - git
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: python-packges
-
 - name: pip upgrade
   pip:
     name: "{{ item }}"

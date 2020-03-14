@@ -20,19 +20,42 @@
   notify: source bash_profile
   tags: block-in-file
 
-- shell: bash -lc "pyenv versions | grep {{ python_version }}"
-  register: pyenv_version
-  ignore_errors: yes
-  changed_when: False
-  tags: pyenv-versions
+- name: Install dependencies
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - gcc
+      - openssl-devel
+      - readline-devel
+      - bzip2-devel
+      - sqlite-devel
+      - patch
+      - libffi-devel
+      - python
+      - python-setuptools
+      - python-devel
+      - python-pip
+      - git
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: python-packges
+
+#- shell: bash -lc "pyenv versions | grep {{ python_version }}"
+#  register: pyenv_version
+#  ignore_errors: yes
+#  changed_when: False
+#  tags: pyenv-versions
 
 - shell: bash -lc "pyenv install {{ python_version }}"
-  when: pyenv_version|failed
+  #when: pyenv_version|failed
+  tags: pyenv-install
 
 - shell: bash -lc "pyenv local {{ python_version }}"
   args:
     chdir: /opt/ansible-web-application
-  when: pyenv_version|failed
+  #when: pyenv_version|failed
+  tags: pyenv-versions
 
 - set_fact: ansible_python_interpreter=/root/.pyenv/shims/python
 

@@ -12,11 +12,13 @@
   tags: flask
 
 - git:
-    repo: 'https://github.com/manab1200/ansible-web-application.git'
+    repo: "https://github.com/manab1200/ansible-web-application"
     dest: /opt/ansible-web-application/
+    accept_hostkey: yes
     clone: yes
-    remote: upstream
+    #remote: upstream
   become: yes
+  ignore_errors: "{{ ansible_check_mode }}"
   tags: git-clone
 
 - name: Copy web-server code
