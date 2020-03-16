@@ -15,3 +15,12 @@
     - nginx_config
     - gunicorn
     - flask_web
+
+- name: Deploy a load balancer
+  hosts: lb_servers
+  become: yes
+  roles:
+    - pyenv
+    - python
+    - nginxinc.nginx
+    - nginx_config

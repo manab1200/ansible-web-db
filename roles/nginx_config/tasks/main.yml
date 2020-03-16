@@ -2,7 +2,8 @@
 # tasks file for nginx-config
 - name: Copy nginx config
   copy:
-    src: ./config/flask.conf
+    #src: ./config/flask.conf
+    src: "{{ web_server_config }}"
     dest: /etc/nginx/conf.d/
     owner: root
     group: root
